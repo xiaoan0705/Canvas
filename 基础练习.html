@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Canvas</title>
+	</head>
+	<body>
+		<canvas id="lineto" width="1200" height="1000">您的浏览器不支持Canvas</canvas>
+		<script>
+			var dw=document.getElementById("lineto").getContext("2d");
+			//移动到起点
+			dw.moveTo(50,50);
+			//移动到终点
+			dw.lineTo(420,200);
+			//绘制完成
+			dw.stroke();
+			//新画一条
+			dw.beginPath();
+			//设置线条宽度
+			dw.lineWidth=10;
+			//设置填充颜色
+			dw.strokeStyle="#ee2c2c";
+			//移动到起点
+			dw.moveTo(450,50);
+			dw.lineTo(100,250);
+			dw.stroke();
+			
+			//绘制矩形
+			dw.beginPath();
+			dw.lineWidth=10;
+			dw.strokeStyle="#ccc";
+			dw.rect(300,300,100,100);//(x,y,width,height)
+			//实心矩形
+			/*dw.fillRect(300,300,100,100);
+			dw.fillStyle="#ccc";*/
+			dw.stroke();
+	
+			//圆
+			dw.beginPath();
+			dw.arc(600,200,50,0,270*Math.PI/180,false);
+			dw.strokeStyle="blue";
+			dw.fillStyle="black";
+			dw.fill();
+			dw.stroke();
+			
+			//绘制弧形
+			dw.beginPath();
+			dw.lineWidth=2;
+			dw.strokeStyle="yellow";
+			dw.moveTo(20,20);
+			dw.lineTo(100,20);
+			dw.arcTo(150,20,150,70,30);
+			dw.lineTo(150,120);
+			dw.stroke();
+			
+			//贝塞尔曲线
+			dw.beginPath();
+			dw.moveTo(700,20);
+			dw.quadraticCurveTo(700,100,850,20);
+			dw.strokeStyle="green";
+			dw.stroke();
+			
+			
+			//线性渐变
+			var grd=dw.createLinearGradient(800,0,1000,0);//渐变的两组坐标值，需要与下面矩形相关
+			grd.addColorStop(0,"red");
+			grd.addColorStop(1,"orange");
+			dw.fillStyle=grd;
+			dw.fillRect(900,20,200,100);
+			
+			//放射渐变
+			var grd=dw.createRadialGradient(750,20,5,750,60,100);
+			grd.addColorStop(0,"black");
+			grd.addColorStop("0.3","magenta");
+			grd.addColorStop("0.5","blue");
+			grd.addColorStop("0.6","green");
+			grd.addColorStop("0.8","yellow");
+			grd.addColorStop(1,"white");
+			dw.fillStyle=grd;
+			dw.fillRect(700,20,150,100);
+			
+			//阴影
+			dw.shadowColor="grey";
+			dw.fillStyle="blue";
+			dw.shadowBlur=1;
+			dw.fillRect(700,200,100,80);
+			
+			dw.shadowBlur=10;
+			dw.fillRect(700,300,100,80);
+			
+			dw.shadowOffsetX=10;
+			dw.fillRect(850,200,100,80);
+			dw.shadowOffsetY=10;
+			dw.fillRect(850,300,100,80);
+			
+			
+		</script>
+	</body>
+</html>

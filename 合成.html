@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>用canvas控制图像合成</title>
+	</head>
+	<body>
+		<canvas id="container"></canvas>
+		<script>
+			var canvas=document.getElementById('container');
+			canvas.width=1200;
+			canvas.height=1200;
+			var ctx=canvas.getContext('2d');
+			ctx.fillStyle='red';
+			ctx.fillRect(50,50,200,100);
+			ctx.globalCompositeOperation='destination-over';
+			ctx.fillStyle='blue';
+			ctx.fillRect(130,100,200,100);
+			
+			ctx.fillStyle='red';
+			ctx.fillRect(350,50,200,100);
+			ctx.globalCompositeOperation='source-out';
+			ctx.fillStyle='blue';
+			ctx.fillRect(430,100,200,100);
+			
+		</script>
+	</body>
+</html>

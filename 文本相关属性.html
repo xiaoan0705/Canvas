@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<canvas id="demo"></canvas>
+		<script>
+			var canvas=document.getElementById('demo');
+			canvas.width=600;
+			canvas.height=600;
+			canvas.style.border="1px solid #000000";
+			var ctx=canvas.getContext('2d');
+			//绘制文本
+			ctx.moveTo(0,100);
+			ctx.lineTo(canvas.width,100);
+			ctx.stroke();
+			ctx.font="20px Verdana";
+			ctx.textBaseline="alphabetic"
+			//ctx.fillText("小安快跑",0,100);
+			ctx.strokeText("小安快跑",0,100);
+			ctx.beginPath();
+			ctx.font="20px Verdana";
+			ctx.textBaseline="hanging"
+			ctx.strokeText("小安快跑",100,100);
+			ctx.beginPath();
+			ctx.font="20px Verdana";
+			ctx.textBaseline="top"
+			ctx.strokeText("小安快跑",200,100);
+			ctx.beginPath();
+			ctx.font="20px Verdana";
+			ctx.textBaseline="middle"
+			ctx.strokeText("小安快跑",300,100);
+		</script>
+	</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<canvas id="canvas" width="1000" height="1000" >您的浏览器不支持Canvas</canvas>
+		<script>
+			var dw=document.querySelector('#canvas').getContext("2d");
+		    //原大小
+			dw.strokeRect(10,10,40,20);
+			//放大
+			dw.scale(2,2);
+			dw.strokeRect(10,10,40,20);//起始坐标位置也放大了
+			dw.scale(0.5,0.5);//使用缩放之后需要将其恢复原状，否则下面的所有图形都会缩放
+			dw.strokeRect(30,10,40,20);
+			//平移
+			dw.translate(70,70);
+			
+			//旋转
+			var ctx=document.querySelector('#canvas').getContext("2d");
+			ctx.strokeRect(20,20,300,20);
+			ctx.strokeStyle="#ccc";
+			ctx.rotate(30*Math.PI/180);
+			ctx.strokeRect(20,20,300,20);
+			ctx.rotate(-30*Math.PI/180);//恢复原状
+			
+		    //图片旋转
+			var img=new Image();
+			img.src='img/1.jpg';
+			img.onload=function(){
+				dw.drawImage(img,100,100,300,200);
+				dw.scale(1,-1);
+				dw.drawImage(img,400,-300,300,200);
+				
+			}		
+		</script>
+	</body>
+</html>

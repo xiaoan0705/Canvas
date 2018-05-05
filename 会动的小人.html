@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<canvas id="demo"></canvas>
+		<input type="button" id="pre" value="↓"/>
+		<input type="button" id="left" value="←"/>
+		<input type="button" id="behind" value="↑"/>
+		<input type="button" id="right" value="→"/>
+		<script>
+			var canvas=document.getElementById('demo');
+			canvas.width=600;
+			canvas.height=600;
+			canvas.style.border="1px solid #000000";
+			var ctx=canvas.getContext('2d');
+			
+			
+			var img=new Image();
+			img.src='img/03.png';
+			img.onload=function(){
+				var width=img.width/4;
+				var height=img.height/4;
+				var speed=5;
+				var i=0;//控制截取的x值
+				var j=0;//控制截取的y值
+					setInterval(function(){
+					ctx.clearRect(0,0,canvas.width,canvas.height);//清除之前的小人（即画布）
+					ctx.drawImage(img,width*i,height*j,width,height,251,251,width,height);
+					i++;
+					i%=4;//stateX=stateX%4
+					},1000/speed);
+					
+				var pre=document.getElementById('pre');
+				pre.onclick=function(){
+					j=0;
+				};
+				var left=document.getElementById('left');
+				left.onclick=function(){
+					j=1;
+				};
+				var right=document.getElementById('right');
+				right.onclick=function(){
+					j=2;
+				};
+				var behind=document.getElementById('behind');
+				behind.onclick=function(){
+					j=3;
+				}
+			}
+		</script>
+	</body>
+</html>

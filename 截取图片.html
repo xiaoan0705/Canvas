@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<img src="img/02.jpg" id="img" width="400" height="300"/>
+		<canvas id="demo"></canvas>
+		<script>
+			var canvas=document.getElementById('demo');
+			canvas.width=600;
+			canvas.height=600;
+			canvas.style.border="1px solid #000000";
+			var ctx=canvas.getContext('2d');
+			
+			var img=document.getElementById('img');
+			img.onload=function(){
+				ctx.drawImage(img,100,100,400,300);
+				ctx.drawImage(img,500,500,100,100);
+				//9个参数为截取图片
+				ctx.drawImage(img,600,200,600,600,200,400,200,200);//参数分别是截取图片的起始位置x,y，宽高，以及显示的起始位置及宽高
+			}
+		</script>
+	</body>
+</html>

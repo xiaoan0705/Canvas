@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<canvas id="demo"></canvas>
+		<script>
+			var canvas=document.getElementById('demo');
+			canvas.width=600;
+			canvas.height=600;
+			canvas.style.border="1px solid #000000";
+			var ctx=canvas.getContext('2d');
+			
+				var data=[
+				{
+					'value':.4,
+					'color':'red',
+					'title':'应届生'
+				},
+				{
+					'value':.2,
+					'color':'blue',
+					'title':'社会招生'
+				},
+				{
+					'value':.3,
+					'color':'green',
+					'title':'老学员推荐'
+				},
+				{
+					'value':.1,
+					'color':'#ccc',
+					'title':'公开课'
+				}
+				];
+				
+				var cenX=canvas.width/2;
+				var cenY=canvas.height/2;
+				var r=200;
+				var textAngle=0;
+				var beginAngle=0;
+				var endAngle=0;
+				for(var i=0;i<data.length;i++){
+					ctx.beginPath();
+					ctx.moveTo(cenX,cenY);
+					endAngle=beginAngle+360*data[i].value;
+					ctx.arc(cenX,cenY,r,beginAngle*Math.PI/180,endAngle*Math.PI/180);
+					
+					ctx.fillStyle=data[i].color;
+					ctx.fill();
+					
+					//给图加文字
+					//得到当前扇形角度的一半
+					textAngle=beginAngle+1/2*data[i].value*360;
+					if(textAngle>90&&textAngle<270){
+						ctx.textAlign="end";
+					}
+					var x=cenX+(r+20)*Math.cos(textAngle*Math.PI/180);
+					var y=cenY+(r+20)*Math.sin(textAngle*Math.PI/180);
+					ctx.fillText(data[i].value*100+'%',x,y);
+					beginAngle=endAngle;
+				}
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				/*var beginAngle=0;
+				var endAngle=0;
+				//***********************************************************
+				var data1=data[0];
+				 ctx.beginPath();
+				 ctx.moveTo(300,300);
+				 ctx.arc(300,300,200,beginAngle*Math.PI/180,360*data1.value*Math.PI/180);
+				 ctx.fillStyle=data1.color;
+				 ctx.fill();
+				 //***********************************************************
+				 //将当前扇形的起始角度设置为第一个的结束角度
+				 var data2=data[1];
+				 beginAngle=endAngle+360*data1.value;
+				 endAngle=beginAngle+360*data2.value;
+				 ctx.beginPath();
+				 ctx.moveTo(300,300);
+				 ctx.arc(300,300,200,beginAngle*Math.PI/180,endAngle*Math.PI/180);
+				 ctx.fillStyle=data2.color;
+				 ctx.fill();
+				 //***********************************************************
+				 var data3=data[2];
+				 beginAngle=endAngle;
+				 endAngle=endAngle+360*data3.value;
+				 ctx.beginPath();
+				 ctx.moveTo(300,300);
+				 ctx.arc(300,300,200,beginAngle*Math.PI/180,endAngle*Math.PI/180);
+				 ctx.fillStyle=data3.color;
+				 ctx.fill();
+				 //***********************************************************
+				 var data4=data[3];
+				 beginAngle=endAngle;
+				 endAngle=endAngle+360*data4.value;
+				 ctx.beginPath();
+				 ctx.moveTo(300,300);
+				 ctx.arc(300,300,200,beginAngle*Math.PI/180,endAngle*Math.PI/180);
+				 ctx.fillStyle=data4.color;
+				 ctx.fill();*/
+				 
+		</script>
+	</body>
+</html>
