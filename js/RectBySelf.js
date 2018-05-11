@@ -1,0 +1,45 @@
+//面向对象的思想封装一个矩形
+//画一个矩形：宽100，高100，在（100，100）位置，缩放x=2，y=2，旋转60，描边为黑色，线条宽为4，填充为红
+var Rect=function(option){
+	this._init(option);
+}
+Rect.prototype={
+	_init:function(option){
+		this.width=option.width;
+		this.height=option.height;
+		this.x=option.x;
+		this.y=option.y;
+		this.scaleX=option.scaleX;
+		this.scaleY=option.scaleY;
+		this.angle=option.angle*Math.PI/180;
+		this.opacity=option.opacity;
+		this.lineWidth=option.lineWidth;
+		this.stroke=option.stroke;
+		this.fill=option.fill;
+	},
+	render:function(ctx){
+		ctx.save();//保存当前状态
+		ctx.scale(this.scaleX,this.scaleY);
+		ctx.translate(this.x+this.width/2,this.y+this.height/2);
+		ctx.rotate(this.angle);
+		ctx.rect(-this.width/2,-this.height/2,this.width,this.height);
+		ctx.lineWidth=this.lineWidth;
+		ctx.strokeStyle=this.stroke;
+		ctx.fillStyle=this.fill;
+		ctx.stroke();
+		ctx.fill();
+		ctx.restore();//返回之前保存的状态
+	},
+	//使图形动起来的方法
+	to:function(ctx){
+		var self=this;
+		setInterval(function(){
+			//如果重新设置画布的宽度相当于清空画布，对画布进行重置
+			ctx.canvas.width=ctx.canvas.width;
+			self.x++;
+			self.render(ctx);
+			ctx.restore();
+		},50);
+	}
+}
+

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="konva/konva.min.js"></script>
+	</head>
+	<body>
+		<div id='demo'></div>
+		<script>
+			var width=window.innerWidth;
+			var height=window.innerHeight;
+			
+			var cenX=width/2;
+			var cenY=height/2;
+			//创建舞台
+			var stage=new Konva.Stage({
+				container:'demo',
+				width:width,
+				height:height
+			});
+			//layer层的概念
+			var layer=new Konva.Layer();
+			stage.add(layer); //把层添加到舞台
+			
+			//创建球数组
+			var circleArr=[];
+			var radius=50;
+			var circleColor=['red','green','blue'];
+			for(var i=0;i<3;i++){
+				var circle=new Konva.Circle({
+					x:cenX+(i-1)*2*radius,
+					y:cenY,
+					radius:radius,
+					fill:circleColor[i]
+				});
+				circleArr[i]=circle;
+				layer.add(circle);
+			}
+			layer.draw();
+			function circleMove(){//设置圆的层次，默认为1
+				circleArr[0].setZIndex(2);
+				circleArr[2].setZIndex(0);
+				circleArr[0].to({
+					x:circleArr[0].x()+4*radius,//用circleArr[0]的x属性时要加（）
+					scaleX:.8,//设置缩放来改变大小
+					scaleY:.8,
+					duration:2,//持续时间
+					onFinish:function(){
+						circleArr[0].setZIndex(0),
+						circleArr[0].to({//轮回
+							x:circleArr[0].x()-4*radius,//用circleArr[0]的x属性时要加（）
+							scaleX:1.2,//设置缩放来改变大小
+							scaleY:1.2,
+							duration:2,//持续时间		
+						});
+					}
+				});
+				
+				circleArr[2].to({
+					x:circleArr[2].x()-4*radius,
+					scaleX:1.2,
+					scaleY:1.2,
+					duration:2,
+					onFinish:function(){
+						circleArr[2].setZIndex(2),
+						circleArr[2].to({
+							x:circleArr[2].x()+4*radius,//用circleArr[0]的x属性时要加（）
+							scaleX:.8,//设置缩放来改变大小
+							scaleY:.8,
+							duration:2,//持续时间	
+							onFinish:function(){
+								circleMove();
+							}
+						});
+					}
+				});
+			}
+			circleMove();
+		</script>
+	</body>
+</html>

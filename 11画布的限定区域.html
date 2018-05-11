@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+  <canvas id="demo"></canvas>
+  <script>
+  var canvas = document.getElementById("demo");
+  canvas.width = 600;
+  canvas.height = 600;
+  canvas.style.border = "1px solid #000";
+  var ctx = canvas.getContext("2d");
+  
+  ctx.strokeRect(0,0,100,100);
+
+  ctx.strokeRect(150,150,300,300);
+  ctx.rect(150,150,200,200);
+  ctx.clip();//下面的操作只能在上面限定的区域进行操作
+  ctx.fillRect(150,150,300,300);
+
+  </script>
+</body>
+</html>

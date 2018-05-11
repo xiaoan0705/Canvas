@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+  <canvas id="demo"></canvas>
+  <script>
+  var canvas = document.getElementById("demo");
+  canvas.width = 600;
+  canvas.height = 600;
+  canvas.style.border = "1px solid #000";
+  var ctx = canvas.getContext("2d");
+  ctx.globalAlpha = 0.4 ;//全局透明度
+  ctx.beginPath();
+  ctx.rect(0,0,200,200);
+  ctx.fillStyle = "red";
+  ctx.fill();
+  ctx.beginPath();
+  ctx.rect(220,220,200,200);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.rect(420,420,200,200);
+  ctx.fill();
+
+  </script>
+</body>
+</html>

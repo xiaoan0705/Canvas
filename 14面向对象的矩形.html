@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<script src="js/RectBySelf.js"></script>
+		<title></title>
+	</head>
+	<body>
+		<canvas id='demo'></canvas>
+		<script>
+		    var canvas = document.getElementById("demo");
+		    canvas.width = 600;
+		    canvas.height = 600;
+		    canvas.style.border = "1px solid #000";
+		    var ctx = canvas.getContext("2d");
+		   
+		    var option={
+		    	width:100,
+		    	height:100,
+		    	x:100,
+		    	y:100,
+		    	scaleX:2,
+		    	scaleY:2,
+		    	angle:60,
+		    	opacity:.6,
+		    	lineWidth:4,
+		    	stroke:'black',
+		    	fill:'red'
+		    	
+		    };
+		    var rect=new Rect(option);
+		    rect.render(ctx);
+		    rect.to(ctx);
+		</script>
+	</body>
+</html>
