@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="konva/konva.min.js"></script>
+	</head>
+	<body>
+		<div id='container'></div>
+		<script>
+			//创建舞台
+			var stage=new Konva.Stage({
+				container:'container',
+				width:window.innerWidth,//设置全屏
+				height:window.innerHeight
+			});
+			//创建层
+			var layer=new Konva.Layer();
+			stage.add(layer);
+			//创建矩形
+			var rect=new Konva.Rect({
+				x:100,
+				y:100,
+				width:100,
+				height:100,
+				fill:'gold',//矩形填充颜色
+				stroke:'navy',//矩形描边的颜色
+				strokeWidth:4,
+				opacity:.4,
+				scale:1.2,
+				rotation:30,
+				cornerRadius:10,//圆角大小（像素）
+				id:'rect1',
+				name:'rect',
+				draggable:true//是否可拖拽
+			});
+			layer.add(rect);
+			layer.draw();
+			//get tween object
+			var tween=new Konva.Tween({
+				node:rect,//需要动画的图形
+				duration:2,//持续时间
+				x:200,
+				y:200,
+				yoyo:true,//来回一直执行下去
+				opacity:1,
+				scaleX:2,
+
+			});
+			tween.play();
+			//setTimeout的作用是到2s后执行，只执行一次
+			//setInterval是每隔2s执行一次
+			/*setTimeout(function(){
+				tween.play();
+			},2000);*/
+			
+		</script>
+	</body>
+</html>

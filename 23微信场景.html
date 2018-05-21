@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name='viewport' content="width=device-width,initial-scale=1.0,user-scalable=no"/>
+		<title></title>
+		<script src="konva/konva.min.js"></script>
+		<script src="js/进度条.js"></script>
+		<script src="js/柱状图.js"></script>
+		<script src="js/饼状图.js"></script>
+	</head>
+	<body>
+		<div id='demo'></div>
+		<script>			
+			var stage=new Konva.Stage({
+				container:'demo',
+				width:window.innerWidth,
+				height:window.innerHeight
+			});
+			
+			var imgArr=['bg.jpg','html5.png','lbg.jpg','lightr.png','logo.gif'];
+			var loadImg=[];
+			
+			var scene1={
+				//将场景分为背景、动画、光照三个层
+				layerArr:[],
+				init:function(){//加载场景
+					//进度条场景
+					this.schedule=new Schedule({	
+						x:1/8*stage.width(),
+						y:1/2*stage.height(),
+						innerW:0,
+						height:1/16*stage.height(),
+						cornerRadius:5,
+						stroke:'yellow',
+						outW:3/4*stage.width(),
+						fill:'red',
+                        stage:stage,
+                        text:'努力加载中:0%',
+                        fontSize:20
+					});
+					this.layer=new Konva.Layer();
+					this.schedule.addToGroupOrLayer(this.layer);
+					
+					this.layerArr[0]=this.layer;
+					//将所有层添加到stage中
+					this.layerArr.forEach(function(item,index){
+							stage.add(item);
+					});
+				},
+				pre:function(){//入场动画
+					//在这个页面上有多少张图片，进度条就加载多少
+					var loadedNum=0;
+					imgArr.forEach(function(item,index){
+						var img=new Image();
+						img.src='img/'+imgArr[index];
+						img.onload=function(){
+							//将加载的图片对象保存起来
+							loadImg[index]=img;
+							loadedNum++;
+						}
+					});
+					var _this=this;
+					var timer=setInterval(function(){
+						if(loadedNum==imgArr.length){
+							_this.layerArr.forEach(function(item,index){
+								item.draw();//将所有层画出来
+								
+							});							
+							clearInterval(timer);
+							setTimeout(function(){
+								_this.pass();
+							},2000);
+						}
+						_this.schedule.changeVal(loadedNum/imgArr.length);
+					},200);
+				},
+				pass:function(){//出场动画
+					var _this=this;
+					this.schedule.group.to({
+						x:stage.width()/2,
+						y:0,
+						scaleX:0,
+						scaleY:0,
+						opacity:0,
+						duration:1,
+						//清楚场景1
+						onFinish:function(){
+							_this.layerArr.forEach(function(item,index){
+								item.destroy();
+							});
+							scene2.init();
+							scene2.pre();
+						}
+					});
+				}
+			}
+			
+			var scene2={
+				layerArr:[],
+				init:function(){
+					var bgLayer=new Konva.Layer();
+					var animation=new Konva.Layer();
+					var light=new Konva.Layer();
+					//将背景图片加到背景层中(不能直接把图片放到层中)
+					var bgImg=new Konva.Image({
+						x: 0,
+					    y: 0,
+					    image: loadImg[2],
+					    width: stage.width(),
+					    height: stage.height()
+
+					})
+					bgLayer.add(bgImg);
+					//将两个三角形放到动画层中
+					this.shape1 = new Konva.Shape({
+						x: 0,
+						y: -1/4*stage.height(),
+						sceneFunc:function(context) {
+							context.beginPath();
+							context.moveTo(0,0);
+							context.lineTo(stage.width(),0);
+							context.lineTo(0,1/4*stage.height());
+							context.closePath();
+							context.fillStyle='red',
+							context.fill();
+						}
+					});
+					this.shape2 = new Konva.Shape({
+						x: 0,
+						y: 1/4*stage.height(),
+						sceneFunc:function(context) {
+							context.beginPath();
+							context.moveTo(stage.width(),3/4*stage.height());
+							context.lineTo(stage.width(),stage.height());
+							context.lineTo(0,stage.height());
+							context.closePath();
+							context.fillStyle='#ccc',
+							context.fill();
+						}
+					});
+					animation.add(this.shape1);
+					animation.add(this.shape2);
+					//创建一个柱状图对象
+					var data=[
+						{name:'前端',value:'.8',color:'green'},
+						{name:'PHP',value:'.3',color:'blue'},
+						{name:'Java',value:'.7',color:'red'},
+						{name:'UI',value:'.9',color:'yellow'},
+						{name:'IOS',value:'.4',color:'pink'},
+						{name:'Android',value:'.9',color:'orange'}
+					];
+					this.histogram=new Histogram({
+						x:1/8*stage.width(),
+						y:3/4*stage.height(),
+						data:data,
+						width:3/4*stage.width(),
+						height:1/2*stage.height()
+					});
+					animation.add(this.histogram.group);
+				
+					//将光照添加到光照层
+					this.lightImage=new Konva.Image({
+						x:0,
+						y:0,
+						width:stage.width(),
+						height:stage.height(),
+						image:loadImg[3]
+					});
+					light.add(this.lightImage);
+					//设置层的位置
+					this.layerArr[0]=bgLayer;
+					this.layerArr[1]=animation;
+					this.layerArr[2]=light;
+					//把每一层添加到舞台上
+					this.layerArr.forEach(function(item,index){
+						stage.add(item);
+					});
+				},
+				pre:function(){
+					//绘制三个层
+					this.layerArr.forEach(function(item,index){
+						item.draw();
+					});
+					//添加动画
+					this.histogram.moveTo();
+					this.shape1.to({
+						y:0,
+						duration:1
+					});
+					var _this=this;
+					this.shape2.to({
+						y:0,
+						duration:1,
+						onFinish:function(){
+							_this.pass();
+						}
+					});
+					//使灯光来会闪烁
+					this.lightImage.to({
+						opacity:.1,
+						duration:2,
+						yoyo:true
+					})
+				},
+				pass:function(){
+					//两个三角形回到原来位置
+					this.shape1.to({
+						y:-1/4*stage.height(),
+						duration:1
+					});
+					this.shape2.to({
+						y:1/4*stage.height(),
+						duration:1
+					});
+					//柱状图消失
+					var _this=this;
+					this.histogram.group.to({
+						x:1/2*stage.width(),
+						y:0,
+						duration:1,
+						scaleX:0,
+						scaleY:0,
+						opacity:.1,
+						onFinish:function(){
+							_this.layerArr.forEach(function(item,index){
+								item.destroy();
+							});
+							scene3.init();
+							scene3.pre();
+						}
+					});
+					
+				}
+			}
+			
+			var scene3={
+				layerArr:[],
+				init:function(){
+					var bgLayer=new Konva.Layer();
+					var animation=new Konva.Layer();
+					var light=new Konva.Layer();
+					//将背景图片加到背景层中(不能直接把图片放到层中)
+					var bgImg=new Konva.Image({
+						x: 0,
+					    y: 0,
+					    image: loadImg[0],
+					    width: stage.width(),
+					    height: stage.height()
+
+					})
+					bgLayer.add(bgImg);
+					//将两个三角形放到动画层中
+					this.shape1 = new Konva.Shape({
+						x: 0,
+						y: -1/4*stage.height(),
+						sceneFunc:function(context) {
+							context.beginPath();
+							context.moveTo(0,0);
+							context.lineTo(stage.width(),0);
+							context.lineTo(0,1/4*stage.height());
+							context.closePath();
+							context.fillStyle='red',
+							context.fill();
+						}
+					});
+					this.shape2 = new Konva.Shape({
+						x: 0,
+						y: 1/4*stage.height(),
+						sceneFunc:function(context) {
+							context.beginPath();
+							context.moveTo(stage.width(),3/4*stage.height());
+							context.lineTo(stage.width(),stage.height());
+							context.lineTo(0,stage.height());
+							context.closePath();
+							context.fillStyle='#ccc',
+							context.fill();
+						}
+					});
+					animation.add(this.shape1);
+					animation.add(this.shape2);
+					//创建一个饼状图对象
+					var data=[
+						{name:'前端',value:'.25',color:'green'},
+						{name:'PHP',value:'.3',color:'blue'},
+						{name:'Java',value:'.2',color:'red'},
+						{name:'UI',value:'.05',color:'yellow'},
+						{name:'IOS',value:'.1',color:'pink'},
+						{name:'Android',value:'.1',color:'orange'}
+					];
+					this.cake=new Cake({
+						x:1/2*stage.width(),
+						y:1/2*stage.height(),
+						data:data,
+						radius:180,
+						outerRadius:170
+					});
+					animation.add(this.cake.group);
+				
+					//将光照添加到光照层
+					this.lightImage=new Konva.Image({
+						x:0,
+						y:0,
+						width:stage.width(),
+						height:stage.height(),
+						image:loadImg[3]
+					});
+					light.add(this.lightImage);
+					//设置层的位置
+					this.layerArr[0]=bgLayer;
+					this.layerArr[1]=animation;
+					this.layerArr[2]=light;
+					//把每一层添加到舞台上
+					this.layerArr.forEach(function(item,index){
+						stage.add(item);
+					});
+				},
+				pre:function(){
+					//绘制三个层
+					this.layerArr.forEach(function(item,index){
+						item.draw();
+					});
+					//添加动画
+					this.cake.moveTo();
+					this.shape1.to({
+						y:0,
+						duration:1
+					});
+					var _this=this;
+					this.shape2.to({
+						y:0,
+						duration:1,
+						onFinish:function(){
+							_this.pass();
+						}
+					});
+					//使灯光来会闪烁
+					this.lightImage.to({
+						opacity:.1,
+						duration:2,
+						yoyo:true
+					})
+				},
+				pass:function(){
+					this.shape1.to({
+						y:-1/4*stage.height(),
+						duration:1
+					});
+					this.shape2.to({
+						y:1/4*stage.height(),
+						duration:1
+					});
+					//饼状图消失
+					var _this=this;
+					this.cake.group.to({
+						x:1/2*stage.width(),
+						y:0,
+						duration:1,
+						scaleX:0,
+						scaleY:0,
+						opacity:.1,
+						onFinish:function(){
+							_this.layerArr.forEach(function(item,index){
+								item.destroy();
+							});
+							scene4.init();
+							scene4.pre();
+						}
+					});
+				}
+			}
+			
+			var scene4={
+				layerArr:[],
+				init:function(){
+					var bgLayer=new Konva.Layer();
+					var animation=new Konva.Layer();
+					var light=new Konva.Layer();
+					
+					this.bgImage=new Konva.Image({
+						x:0,
+						y:0,
+						width: stage.width(),
+					    height: stage.height(),
+					    image:loadImg[0]
+					});
+					bgLayer.add(this.bgImage);
+					this.logoImage=new Konva.Image({
+						x:0,
+						y:-100,
+						width: 100,
+					    height: 100,
+					    image:loadImg[1]
+					});
+					animation.add(this.logoImage);
+					this.lightImage=new Konva.Image({
+						x:0,
+						y:0,
+						width:stage.width(),
+						height:stage.height(),
+						image:loadImg[3]
+					});
+					light.add(this.lightImage);
+					
+					this.layerArr[0]=bgLayer;
+					this.layerArr[1]=animation;
+					this.layerArr[2]=light;
+					this.layerArr.forEach(function(item,index){
+						stage.add(item);
+					});
+				},
+				pre:function(){
+					this.layerArr.forEach(function(item,index){
+						item.draw();
+					});
+					this.logoImage.to({
+						y:50,
+						duration:1,
+						yoyo:true
+					});
+					this.lightImage.to({
+						opacity:.1,
+						duration:1,
+						yoyo:true
+					});
+				},
+				pass:function(){
+					
+				}
+			}
+			scene1.init();
+			scene1.pre();
+		
+		</script>
+	</body>
+</html>

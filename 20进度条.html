@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>进度条</title>
+		<script src="konva/konva.min.js"></script>
+	</head>
+	<body>
+		<div id='demo'></div>
+		<script>
+			var width=window.innerWidth;
+			var height=window.innerHeight;
+			
+			var stage=new Konva.Stage({
+				container:'demo',
+				width:width,
+				height:height
+			});
+			var layer=new Konva.Layer();
+			stage.add(layer);
+			
+			var outRect=new Konva.Rect({
+				//取值必须加()
+				x:1/8*stage.width(),
+				y:1/2*stage.height(),
+				width:3/4*stage.width(),
+				height:1/16*stage.height(),
+				stroke:'pink',
+				//设置圆角
+				cornerRadius: 4
+			});
+			var innerRect=new Konva.Rect({
+				//取值必须加()
+				x:1/8*stage.width(),
+				y:1/2*stage.height(),
+				width:10,
+				height:1/16*stage.height(),
+				fill:'red',
+				//设置圆角
+				cornerRadius: 4
+			});
+			layer.add(outRect);
+			layer.add(innerRect);
+			layer.draw();
+			innerRect.to({
+				width:3/4*stage.width(),
+				duration:6
+			});
+		</script>
+	</body>
+</html>

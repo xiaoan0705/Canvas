@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>画笑脸；‘；；；；；；；；；；；；；；；；；；；；；；+
+	</head>
+	<body>
+		<canvas id='demo'></canvas>
+		<script>
+			var canvas=document.getElementById('demo');
+			canvas.width=200;
+			canvas.height=200;
+			canvas.style.border='solid 1px grey';
+			canvas.style.background='beige';
+			ctx=canvas.getContext('2d');
+			
+			ctx.beginPath();
+			ctx.arc(100,100,80,0,Math.PI*2);
+			ctx.strokeStyle='red';
+			
+			ctx.moveTo(140,100);
+			ctx.arc(100,100,40,0,Math.PI);
+			
+			ctx.moveTo(90,70);
+			ctx.arc(80,70,10,0,Math.PI*2);
+			
+			ctx.moveTo(120,70);
+			ctx.arc(110,70,10,0,Math.PI*2);
+			ctx.stroke();
+		</script>
+	</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="konva/konva.min.js"></script>
+	</head>
+	<body>
+		<div id='demo'></div>
+		<script>			
+			var stage=new Konva.Stage({
+				container:'demo',
+				width:window.innerWidth,
+				height:window.innerHeight
+			});
+			var layer=new Konva.Layer();
+			stage.add(layer);
+			
+			var data=[
+				{name:'前端',value:'.8',color:'green'},
+				{name:'PHP',value:'.3',color:'blue'},
+				{name:'Java',value:'.7',color:'red'},
+				{name:'UI',value:'.9',color:'yellow'},
+				{name:'IOS',value:'.4',color:'pink'},
+				{name:'Android',value:'.9',color:'orange'}
+			];
+			//创建组
+			var group=new Konva.Group({
+				//设置原点
+				x:1/8*stage.width(),
+				y:3/4*stage.height()
+			});
+			//画底线
+			 var line = new Konva.Line({
+			      points: [0,0,3/4*stage.width(),0],
+			      stroke: 'red',
+			      strokeWidth: 2,
+			      lineCap: 'round',
+			      lineJoin: 'round'
+			});
+			var maxHeight=1/2*stage.height();
+			var width=3/4*stage.width()/data.length;
+			data.forEach(function(item,index){
+				var rect=new Konva.Rect({
+					x:(index+1/4)*width,
+					y:-maxHeight*item.value,
+					width:1/2*width,
+					height:maxHeight*item.value,
+					fill:item.color,
+					cornerRadius:10,
+					shadowColor:'teal',
+					shadowBlur:10,
+					name:'rect'
+				});
+				group.add(rect);
+				//加文字
+				var uptext=new Konva.Text({
+					x:index*width,
+					y:-maxHeight*item.value-20,
+					width:width,
+					fill:item.color,
+					align:'center',
+					text: item.value*100+'%',
+					name:'uptext'
+				});
+				group.add(uptext);
+				var downtext=new Konva.Text({
+					x:(index+1/2)*width,
+					y:10,
+					fill:item.color,
+					align:'center',
+					text: item.name,
+					rotation:30
+				});
+				group.add(downtext);
+			});
+			//使柱状图动起来
+			function moveTo(){
+				//得到group中所有的圆柱
+				var rectArr=group.find('.rect'); 
+				//得到柱状图的原始高度
+				rectArr.forEach(function(item,index){
+					var oldH=item.height();//获取柱状图的高度
+					item.height(0);//设置起始高度
+					var oldY=item.y();
+					item.y(0);
+					item.to({
+						y:oldY,
+						height:oldH,
+						duration:2
+					});
+				});
+				
+				var uptextArr=group.find('.uptext'); 
+				uptextArr.forEach(function(item,index){
+					var oldY=item.y();
+					item.y(-item.fontSize());
+					item.to({
+						y:oldY,
+						duration:2
+					});
+				});
+			}
+			group.add(line);
+			layer.add(group);
+			layer.draw();
+			moveTo();
+			
+			stage.on('contentClick',function(){
+				moveTo();
+			});
+		</script>
+	
+	</body>
+</html>

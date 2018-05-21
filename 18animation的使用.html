@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>使矩形一直转下去，使用yoyo是来回转360度</title>
+		<script src="konva/konva.min.js"></script>
+	</head>
+	<body>
+		<div id='container'></div>
+		<script>
+			//创建舞台
+			var stage=new Konva.Stage({
+				container:'container',
+				width:window.innerWidth,//设置全屏
+				height:window.innerHeight
+			});
+			//创建层
+			var layer=new Konva.Layer();
+			stage.add(layer);
+			//创建矩形
+			var rect=new Konva.Rect({
+				x:100,
+				y:200,
+				width:100,
+				height:200,
+				fill:'gold',//矩形填充颜色
+				stroke:'navy',//矩形描边的颜色
+				strokeWidth:4,
+				opacity:.4,
+				scale:1.2,
+				cornerRadius:10,//圆角大小（像素）
+				id:'rect1',
+				name:'rect',
+				draggable:true,//是否可拖拽
+				offsetX:50,
+				offsetY:100
+			});
+			layer.add(rect);
+			layer.draw();
+
+			var rotate=0;
+			var animation=new Konva.Animation(function(){
+				rotate++;
+				rect.rotate(rotate);
+			},layer);
+			animation.start();
+			
+		</script>
+	</body>
+</html>

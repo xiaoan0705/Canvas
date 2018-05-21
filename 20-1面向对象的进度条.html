@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>面向对象的进度条</title>
+		<script src="konva/konva.min.js"></script>
+		<script src="js/进度条.js"></script>
+	</head>
+	<body>
+		<div id='demo'></div>
+		<script>
+			var width=window.innerWidth;
+			var height=window.innerHeight;
+			
+			var stage=new Konva.Stage({
+				container:'demo',
+				width:width,
+				height:height
+			});
+			var layer=new Konva.Layer();
+			stage.add(layer);
+
+			var schedule=new Schedule({
+				x:stage.width()/8,
+				y:stage.height()/2,
+				innerW:0,
+				height:1/16*stage.height(),
+				stroke:'blue',
+				cornerRadius:10,
+				outW:3/4*stage.width(),
+				fill:'red',
+				stage:stage,
+				text:'努力加载中：0%',
+				fontSize:20
+			});
+			
+			schedule.addToGroupOrLayer(layer);
+			var imgArr = ["01.jpeg","02.jpg","03.png","1.jpg","bg.jpg"];
+			var loadNum = 0;//已经加载完成的图片
+			imgArr.forEach(function(item,index){//ittem当前遍历到的数据  index就是item对应的索引
+				var img = new Image();
+				img.src = "img/" + imgArr[index];//image/1.png
+				img.onload = function(){
+					loadNum ++;
+					//schedule.changeVal(loadNum / imgArr.length);
+				}
+			});
+			var time = setInterval(function(){
+				if(loadNum >= imgArr.length){
+					//清除定时器
+					clearInterval(time);
+				}
+				schedule.changeVal(loadNum / imgArr.length);
+			},200);
+			layer.draw();
+			
+		</script>
+	</body>
+</html>

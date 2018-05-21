@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="konva/konva.min.js"></script>
+	</head>
+	<body>
+		<div id='demo'></div>
+		<script>			
+			var stage=new Konva.Stage({
+				container:'demo',
+				width:window.innerWidth,
+				height:window.innerHeight
+			});
+			var layer=new Konva.Layer();
+			stage.add(layer);
+			
+			var circle=new Konva.Circle({
+				x:1/2*stage.width(),
+				y:1/2*stage.height(),
+				radius:210,
+				stroke:'blue',
+				strokeWidth:2
+			});
+			layer.add(circle);
+			
+			var data=[
+				{name:'前端',value:'.25',color:'green'},
+				{name:'PHP',value:'.3',color:'blue'},
+				{name:'Java',value:'.2',color:'red'},
+				{name:'UI',value:'.05',color:'yellow'},
+				{name:'IOS',value:'.1',color:'pink'},
+				{name:'Android',value:'.1',color:'orange'}
+			];
+			
+			var endAngle=0;
+			var textAngle;
+			data.forEach(function(item,index){
+				var arc=new Konva.Arc({
+					x:stage.width()/2,
+					y:stage.height()/2,
+					outerRadius:200,
+					angle:item.value*360,
+					fill:item.color,
+					rotation:endAngle,
+					name:'arc'
+				});
+				textAngle=endAngle+1/2*item.value*360;
+				var Text=new Konva.Text({
+					x:stage.width()/2+230*Math.cos(textAngle*Math.PI/180),
+					y:stage.height()/2+230*Math.sin(textAngle*Math.PI/180),
+					text:item.value*100+'%',
+					fontSize:20,
+					fill:item.color
+				});
+				endAngle+=item.value*360;
+				if(textAngle>90&&textAngle<270){
+					Text.x(Text.x()-Text.width());
+				}
+				layer.add(arc);
+				layer.add(Text);
+				
+			});
+			
+			function moveTo(){
+				var arcArr=layer.find('.arc');
+				arcArr.forEach(function(item,index){
+					var oldAngle=item.angle();
+					item.angle(0);
+					item.to({
+						angle:oldAngle,
+						duration:2	
+					});
+				});
+			}
+			layer.draw();
+			moveTo();
+		</script>
+	
+	</body>
+</html>
